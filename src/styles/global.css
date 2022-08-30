@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  button.checkbox[data-state="checked"] {
+    @apply bg-green-500;
+  }
+}
