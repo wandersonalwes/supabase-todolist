@@ -6,7 +6,33 @@ import { TodoItem, TodoType } from "../components/todo-item";
 
 export const TodoList = () => {
   const [todo, setTodo] = useState("");
-  const [todos, setTodos] = useState<TodoType[]>([]);
+  const [todos, setTodos] = useState<TodoType[]>([
+    {
+      id: "1",
+      task: "Criar UI",
+      is_complete: true,
+    },
+    {
+      id: "2",
+      task: "Publicar no surge",
+      is_complete: true,
+    },
+    {
+      id: "3",
+      task: "Compartilhar o link com o time",
+      is_complete: true,
+    },
+    {
+      id: "4",
+      task: "Conectar com o supabase",
+      is_complete: false,
+    },
+    {
+      id: "5",
+      task: "Criar tela de login",
+      is_complete: false,
+    },
+  ]);
 
   const handleAddTodo = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
