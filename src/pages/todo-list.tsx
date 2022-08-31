@@ -1,4 +1,4 @@
-import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
+import { FormEvent, useCallback, useEffect, useState } from "react";
 import { Button } from "../components/button";
 import { Header } from "../components/header";
 import { Input } from "../components/input";

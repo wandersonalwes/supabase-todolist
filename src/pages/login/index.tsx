@@ -1,9 +1,9 @@
 import { FormEvent, useState } from "react";
-import { Button } from "../components/button";
-import { Input } from "../components/input";
-import { client } from "../configs/supabase";
+import { Button } from "../../components/button";
+import { Input } from "../../components/input";
+import { client } from "../../configs/supabase";
 
-export const Login = () => {
+export const Login = ({ onSubmit }: any) => {
   const [values, setValues] = useState({
     email: "",
     password: "",
@@ -13,6 +13,11 @@ export const Login = () => {
 
   const handleLogin = async (event: FormEvent) => {
     event.preventDefault();
+
+    onSubmit({
+      email: values.email,
+      password: values.password,
+    });
 
     const { error: authError } = await client.auth.signInWithPassword({
       email: values.email,
@@ -32,10 +37,12 @@ export const Login = () => {
     <form
       onSubmit={handleLogin}
       className="min-h-screen flex justify-center items-center bg-white"
+      data-testid="test-login-page"
     >
       <div className="p-6">
         <h2 className="text-4xl font-bold text-gray-800 mb-8">Entrar</h2>
         <Input
+          data-testid="test-email"
           type="email"
           placeholder="E-mail"
           className="mb-4"
@@ -44,6 +51,7 @@ export const Login = () => {
           onChange={handleChange}
         />
         <Input
+          data-testid="test-password"
           type="password"
           placeholder="Senha"
           className="mb-8"
@@ -52,7 +60,7 @@ export const Login = () => {
           onChange={handleChange}
         />
 
-        <Button type="submit" className="w-full">
+        <Button type="submit" className="w-full" data-testid="test-btn-submit">
           Entrar
         </Button>
 
