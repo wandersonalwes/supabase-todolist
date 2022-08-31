@@ -1,0 +1,26 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: "16"
+
+      - name: Install packages
+        run: yarn install
+
+      - name: Build the app
+        run: yarn build
+
+      - name: Install Surge
+        run: npm install -g surge
+
+      - name: Deploy to surge
+        run: surge ./build ${{ secrets.SURGE_DOMAIN }} --token ${{secrets.TOKEN}}
