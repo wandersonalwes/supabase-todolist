@@ -1,5 +1,10 @@
-import { TodoList } from "./pages/todo-list";
+import { AuthProvider } from "./contexts/auth";
+import { Container } from "./pages/container";
 
 export default function App() {
-  return <TodoList />;
+  return (
+    <AuthProvider>
+      <Container />
+    </AuthProvider>
+  );
 }

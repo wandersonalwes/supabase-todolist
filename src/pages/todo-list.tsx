@@ -1,63 +1,61 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "../components/button";
 import { Header } from "../components/header";
 import { Input } from "../components/input";
 import { TodoItem, TodoType } from "../components/todo-item";
+import { useAuth } from "../hooks/useAuth";
+import debounce from "lodash.debounce";
+import {
+  addTodo,
+  deleteTodo,
+  getAllTodos,
+  updateStatus,
+  updateTodo,
+} from "../services/todos";
 
 export const TodoList = () => {
   const [todo, setTodo] = useState("");
-  const [todos, setTodos] = useState<TodoType[]>([
-    {
-      id: "1",
-      task: "Criar UI",
-      is_complete: true,
-    },
-    {
-      id: "2",
-      task: "Publicar no surge",
-      is_complete: true,
-    },
-    {
-      id: "3",
-      task: "Compartilhar o link com o time",
-      is_complete: true,
-    },
-    {
-      id: "4",
-      task: "Conectar com o supabase",
-      is_complete: false,
-    },
-    {
-      id: "5",
-      task: "Criar tela de login",
-      is_complete: false,
-    },
-  ]);
+  const [todos, setTodos] = useState<TodoType[]>([]);
+  const { user } = useAuth();
 
-  const handleAddTodo = (event: FormEvent<HTMLFormElement>) => {
+  const debouncedSave = useCallback(
+    debounce((id, value) => updateTodo(id, value), 1000),
+    []
+  );
+
+  const handleAddTodo = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!todo) return;
-    setTodos((state) => [
-      {
-        id: new Date().getTime().toString(),
-        is_complete: false,
-        task: todo,
-      },
-      ...state,
-    ]);
-    setTodo("");
+    const { error, data } = await addTodo(todo, user!.id);
+
+    if (error) {
+      return console.log(error);
+    }
+
+    if (data) {
+      setTodos((state) => [data, ...state]);
+      setTodo("");
+    }
   };
 
-  const handleRemove = (id: string) => {
+  const handleRemove = async (id: string) => {
+    const { error } = await deleteTodo(id);
+
+    if (error) return console.log(error);
+
     const newTodos = todos.filter((todo) => todo.id !== id);
     setTodos(newTodos);
   };
 
-  const handleComplete = (id: string) => {
+  const handleComplete = async (id: string, status: boolean) => {
+    const { error } = await updateStatus(id, status);
+
+    if (error) return console.log(error);
+
     const newTodos = todos.map((todo) => {
       if (todo.id === id) {
-        return { ...todo, is_complete: !todo.is_complete };
+        return { ...todo, done: status };
       }
 
       return todo;
@@ -76,7 +74,17 @@ export const TodoList = () => {
     });
 
     setTodos(newTodos);
+
+    debouncedSave(id, value);
   };
+
+  useEffect(() => {
+    (async () => {
+      const { data, error } = await getAllTodos();
+      if (data) setTodos(data);
+      if (error) console.log(error);
+    })();
+  }, []);
 
   return (
     <div className="bg-slate-100 min-h-screen">
@@ -87,6 +95,7 @@ export const TodoList = () => {
             <Input
               value={todo}
               onChange={(event) => setTodo(event.target.value)}
+              placeholder="Nova tarefa"
             />
             <Button type="submit">Adicionar</Button>
           </div>
