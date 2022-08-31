@@ -5,7 +5,7 @@ export const getAllTodos = async () => {
   return await client
     .from("todos")
     .select("*")
-    .order("id", { ascending: false });
+    .order("done", { ascending: true });
 };
 
 export const addTodo = async (task: string, userId: string) => {

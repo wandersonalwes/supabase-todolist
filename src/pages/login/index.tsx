@@ -14,10 +14,10 @@ export const Login = ({ onSubmit }: any) => {
   const handleLogin = async (event: FormEvent) => {
     event.preventDefault();
 
-    onSubmit({
-      email: values.email,
-      password: values.password,
-    });
+    // onSubmit({
+    //   email: values.email,
+    //   password: values.password,
+    // });
 
     const { error: authError } = await client.auth.signInWithPassword({
       email: values.email,
@@ -36,7 +36,7 @@ export const Login = ({ onSubmit }: any) => {
   return (
     <form
       onSubmit={handleLogin}
-      className="min-h-screen flex justify-center items-center bg-white"
+      className="min-h-screen flex justify-center items-center bg-slate-100"
       data-testid="test-login-page"
     >
       <div className="p-6">

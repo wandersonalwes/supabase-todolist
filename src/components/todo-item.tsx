@@ -17,7 +17,14 @@ type Props = {
 
 export const TodoItem = ({ todo, onRemove, onComplete, onEdit }: Props) => {
   return (
-    <div className="bg-white px-6  rounded shadow flex justify-between items-center">
+    <div
+      className={classNames(
+        "bg-white px-6  rounded shadow flex justify-between items-center",
+        {
+          "bg-zinc-50": todo.done,
+        }
+      )}
+    >
       <div className="flex items-center gap-4 flex-1">
         <Checkbox
           checked={todo.done}
@@ -26,9 +33,12 @@ export const TodoItem = ({ todo, onRemove, onComplete, onEdit }: Props) => {
 
         <input
           type="text"
-          className={classNames("w-full py-6 text-gray-600 outline-none", {
-            "line-through text-gray-300 ": todo.done,
-          })}
+          className={classNames(
+            "w-full py-6 text-gray-600 outline-none disabled:bg-transparent",
+            {
+              "line-through text-gray-300 ": todo.done,
+            }
+          )}
           value={todo.task}
           onChange={(event) => onEdit(todo.id, event.target.value)}
           disabled={todo.done}

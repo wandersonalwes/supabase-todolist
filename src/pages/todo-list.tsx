@@ -87,7 +87,7 @@ export const TodoList = () => {
   }, []);
 
   return (
-    <div className="bg-slate-100 min-h-screen">
+    <div className="bg-slate-100 min-h-screen pt-20">
       <Header />
       <form onSubmit={handleAddTodo}>
         <div className="flex items-center p-8 flex-col gap-3 max-w-6xl mx-auto">
