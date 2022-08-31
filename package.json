@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "yarn build && surge dist http://wanderson.supabase.surge.sh/"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.0.0",
