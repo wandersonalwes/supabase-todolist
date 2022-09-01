@@ -3,7 +3,8 @@ import { Button } from "../../components/button";
 import { Input } from "../../components/input";
 import { client } from "../../configs/supabase";
 
-export const Login = ({ onSubmit }: any) => {
+export const Login = () => {
+  const [action, setAction] = useState<"login" | "signup">("login");
   const [values, setValues] = useState({
     email: "",
     password: "",
@@ -11,14 +12,7 @@ export const Login = ({ onSubmit }: any) => {
 
   const [error, setError] = useState("");
 
-  const handleLogin = async (event: FormEvent) => {
-    event.preventDefault();
-
-    // onSubmit({
-    //   email: values.email,
-    //   password: values.password,
-    // });
-
+  const handleLogin = async () => {
     const { error: authError } = await client.auth.signInWithPassword({
       email: values.email,
       password: values.password,
@@ -27,20 +21,42 @@ export const Login = ({ onSubmit }: any) => {
     if (authError) setError(authError.message);
   };
 
+  const handleSignUp = async () => {
+    const { error: authError } = await client.auth.signUp({
+      email: values.email,
+      password: values.password,
+    });
+
+    if (authError) setError(authError.message);
+  };
+
+  const handleSubmit = (event: FormEvent) => {
+    event.preventDefault();
+    return action === "login" ? handleLogin() : handleSignUp();
+  };
+
   const handleChange = (event: any) => {
     setValues((state) => ({
       ...state,
       [event.target.name]: event.target.value,
     }));
   };
+
+  const toggleAction = () => {
+    setAction((currentAction) =>
+      currentAction === "login" ? "signup" : "login"
+    );
+  };
   return (
     <form
-      onSubmit={handleLogin}
+      onSubmit={handleSubmit}
       className="min-h-screen flex justify-center items-center bg-slate-100"
       data-testid="test-login-page"
     >
-      <div className="p-6">
-        <h2 className="text-4xl font-bold text-gray-800 mb-8">Entrar</h2>
+      <div className="p-6 max-w-lg">
+        <h2 className="text-4xl font-bold text-gray-800 mb-8">
+          {action === "login" ? "Entrar" : "Criar conta"}
+        </h2>
         <Input
           data-testid="test-email"
           type="email"
@@ -61,8 +77,19 @@ export const Login = ({ onSubmit }: any) => {
         />
 
         <Button type="submit" className="w-full" data-testid="test-btn-submit">
-          Entrar
+          {action === "login" ? "Entrar" : "Criar conta"}
         </Button>
+
+        <button
+          type="button"
+          onClick={toggleAction}
+          className="h-12 mt-2 w-full"
+        >
+          <span className="block text-center text-gray-400">
+            {action === "login" && "Não tem uma conta? Cadastre-se"}
+            {action === "signup" && "Já tem uma conta? Entrar"}
+          </span>
+        </button>
 
         <span className="text-red-500 mt-8 block">{error && error}</span>
       </div>
