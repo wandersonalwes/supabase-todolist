@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
 import { loginSchema } from "../../validations/login";
+import { DiscordLogo, GithubLogo } from "phosphor-react";
 
 type Credentials = {
   email: string;
@@ -47,6 +48,28 @@ export const Login = () => {
     }
   };
 
+  const handleLoginWithDiscord = async () => {
+    const { error } = await client.auth.signInWithOAuth({
+      provider: "discord",
+      options: {
+        redirectTo: import.meta.env.BASE_URL,
+      },
+    });
+
+    if (error) toast.error("Não foi possível fazer login");
+  };
+
+  const handleLoginWithGitHub = async () => {
+    const { error } = await client.auth.signInWithOAuth({
+      provider: "github",
+      options: {
+        redirectTo: import.meta.env.BASE_URL,
+      },
+    });
+
+    if (error) toast.error("Não foi possível fazer login");
+  };
+
   const onSubmit = (data: Credentials) => {
     return action === "login" ? handleLogin(data) : handleSignUp(data);
   };
@@ -63,9 +86,31 @@ export const Login = () => {
       data-testid="test-login-page"
     >
       <div className="p-6 w-full max-w-lg">
-        <h2 className="text-4xl font-bold text-gray-800 mb-8">
-          {action === "login" ? "Entrar" : "Criar conta"}
+        <h2 className="text-3xl font-bold text-gray-800 mb-6">
+          {action === "login" ? "entrar com:" : "criar conta com:"}
         </h2>
+        <div className="grid grid-cols-2 gap-2">
+          <button
+            type="button"
+            onClick={handleLoginWithDiscord}
+            className="flex items-center justify-center bg-[#7289da] h-12 rounded hover:brightness-90 transition-all"
+            title="Entrar com o Discord"
+          >
+            <DiscordLogo className="text-white w-5 h-5" />
+          </button>
+
+          <button
+            type="button"
+            onClick={handleLoginWithGitHub}
+            className="flex items-center justify-center bg-[#333] h-12 rounded hover:opacity-90 transition-all"
+            title="Entrar com o GitHub"
+          >
+            <GithubLogo className="text-white w-5 h-5" />
+          </button>
+        </div>
+
+        <hr className="my-8 border-gray-300" />
+
         <Input
           error={errors.email?.message}
           data-testid="test-email"

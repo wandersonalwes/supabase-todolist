@@ -12,7 +12,7 @@ export const Button = (props: Props) => {
     <button
       disabled={isLoading}
       className={classNames(
-        "shadow bg-indigo-500 px-4 h-12 rounded text-white flex items-center justify-center",
+        "shadow bg-indigo-500 px-4 h-12 rounded text-white flex items-center justify-center hover:brightness-90 transition-all",
         className
       )}
       {...rest}
