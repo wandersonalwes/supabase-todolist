@@ -4,7 +4,7 @@ import { Check } from "phosphor-react";
 export const Checkbox = (props: CheckboxPrimitive.CheckboxProps) => {
   return (
     <CheckboxPrimitive.Root
-      className="w-5 h-5 rounded-md bg-gray-100 checkbox"
+      className="w-5 h-5 rounded-md bg-gray-100 checkbox flex-shrink-0"
       {...props}
     >
       <CheckboxPrimitive.Indicator>
