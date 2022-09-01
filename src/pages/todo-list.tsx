@@ -96,6 +96,7 @@ export const TodoList = () => {
               value={todo}
               onChange={(event) => setTodo(event.target.value)}
               placeholder="Nova tarefa"
+              containerClassName="flex-1"
             />
             <Button type="submit">Adicionar</Button>
           </div>
