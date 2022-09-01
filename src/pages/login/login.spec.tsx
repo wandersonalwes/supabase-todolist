@@ -28,29 +28,4 @@ describe("TodoList", () => {
     expect(inputEmail.type).toBe("email");
     expect(inputEmail.placeholder).toBe("E-mail");
   });
-
-  it("should have an email and password when submitting the form", () => {
-    const onSubmit = vi.fn();
-    render(<Login onSubmit={onSubmit} />);
-
-    const form = screen.getByTestId<HTMLFormElement>("test-login-page");
-    const inputEmail = screen.getByTestId<HTMLInputElement>("test-email");
-    const inputPassword = screen.getByTestId<HTMLInputElement>("test-password");
-
-    fireEvent.change(inputEmail, {
-      target: { value: "john.doe@mail.com" },
-    });
-
-    fireEvent.change(inputPassword, {
-      target: { value: "any_password" },
-    });
-
-    fireEvent.submit(form);
-
-    expect(onSubmit).toHaveBeenCalledTimes(1);
-    expect(onSubmit).toHaveBeenCalledWith({
-      email: "john.doe@mail.com",
-      password: "any_password",
-    });
-  });
 });
